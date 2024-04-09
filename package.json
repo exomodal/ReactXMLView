@@ -1,4 +1,51 @@
 {
   "name": "react-xml-view",
-  "packageManager": "yarn@4.1.1"
+  "version": "0.0.1",
+  "description": "React component to view XML data",
+  "author": "Sebastiaan Gerritsen <dev@sebastiaan.io>",
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "packageManager": "yarn@4.1.1",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "dependencies": {
+    "fast-xml-parser": "4.3.6",
+    "zustand": "4.5.2"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.2.25",
+    "@storybook/addon-essentials": "^8.0.5",
+    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/addon-links": "^8.0.5",
+    "@storybook/addon-onboarding": "^8.0.5",
+    "@storybook/blocks": "^8.0.5",
+    "@storybook/react": "^8.0.5",
+    "@storybook/react-vite": "^8.0.5",
+    "@storybook/test": "^8.0.5",
+    "@testing-library/react": "^14.2.2",
+    "@types/node": "^20.12.2",
+    "@types/react": "^18.2.73",
+    "@vitejs/plugin-react": "^4.2.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^8.0.5",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7",
+    "vite-plugin-dts": "^3.8.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.4.0"
+  },
+  "peerDependencies": {
+    "react": ">= 18.2.0",
+    "react-dom": ">= 18.2.0"
+  },
+  "files": [
+    "dist"
+  ]
 }
