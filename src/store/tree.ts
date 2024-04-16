@@ -98,11 +98,13 @@ export const useTreeStore = create<TreeStore>()(
         },
         getPath: () => {
           const path = [node.name];
+          if (node.parentId === null) return path;
 
-          while (node.parentId !== null) {
-            const parent = get().node(node.parentId);
-
+          let parent: INode | null = get().node(node.parentId);
+          while (parent !== null) {
             path.push(parent.getName());
+
+            parent = parent.getParent();
           }
 
           return path.reverse();
@@ -127,11 +129,13 @@ export const useTreeStore = create<TreeStore>()(
         },
         getPath: () => {
           const path = [attr.key];
+          if (attr.parentId === null) return path;
 
-          while (attr.parentId !== null) {
-            const parent = get().node(attr.parentId);
-
+          let parent: INode | null = get().node(attr.parentId);
+          while (parent !== null) {
             path.push(parent.getName());
+
+            parent = parent.getParent();
           }
 
           return path.reverse();
@@ -154,11 +158,13 @@ export const useTreeStore = create<TreeStore>()(
         },
         getPath: () => {
           const path = [node.name];
+          if (node.parentId === null) return path;
 
-          while (node.parentId !== null) {
-            const parent = get().node(node.parentId);
-
+          let parent: INode | null = get().node(node.parentId);
+          while (parent !== null) {
             path.push(parent.getName());
+
+            parent = parent.getParent();
           }
 
           return path.reverse();

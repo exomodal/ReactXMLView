@@ -6,7 +6,7 @@ import {
   IValue,
   InteractFn,
   InteractionType,
-} from "types/interaction";
+} from "../../types/interaction";
 
 interface InteractionProps {
   onClickTag?: InteractFn<INode>;

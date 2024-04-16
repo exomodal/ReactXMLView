@@ -1,5 +1,5 @@
 import { X2jOptions, XMLParser } from "fast-xml-parser";
-import { Node } from "types";
+import { Node } from "../types";
 import { useMemo } from "react";
 
 export const useXmlParser = (

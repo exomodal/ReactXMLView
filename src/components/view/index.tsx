@@ -3,7 +3,7 @@ import { X2jOptions } from "fast-xml-parser";
 import { useBuildTree } from "hooks/use-build-tree";
 import { useXmlParser } from "hooks/use-xml-parser";
 import { useRef } from "react";
-import { IAttribute, INode, IValue, InteractFn } from "types/interaction";
+import { IAttribute, INode, IValue, InteractFn } from "../../types/interaction";
 import { useRegisterInteraction } from "./use-register-interaction";
 
 export interface ViewProps {

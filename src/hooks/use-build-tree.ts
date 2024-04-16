@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
-import { useRef } from "react";
 import { useTreeStore } from "store";
-import { Node, StateAttribute, StateNode, StateType, isValue } from "types";
+import { Node, StateAttribute, StateNode, StateType, isValue } from "../types";
 
 export const useBuildTree = (rawTree: Node) => {
   const setTree = useTreeStore((s) => s.setTree);
