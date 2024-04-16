@@ -1,17 +1,20 @@
-import { forwardRef } from "react";
-import { Node, isValue } from "hooks/use-xml-parser";
+import { CloseTag } from "components/close-tag";
+import { ExpandButton } from "components/expand-button";
+import { OpenTag } from "components/open-tag";
 import { useFormatNode } from "./use-format-node";
+import { useTreeStore } from "store/tree";
 
-interface NodeViewProps extends Node {
-  containerRef: React.RefObject<HTMLDivElement>;
-}
-
-export const NodeView = ({
-  name,
-  attributes,
-  children,
+export const ItemView = ({
+  id,
   containerRef,
-}: NodeViewProps) => {
+}: {
+  id: string;
+  containerRef: React.RefObject<HTMLDivElement>;
+}) => {
+  const [{ getChildren, getValues }, onClickValue, value] = useTreeStore(
+    (s) => [s._node(id), s.onClickValue, s.value(id)]
+  );
+
   const {
     nodeRef,
     tagRef,
@@ -20,121 +23,56 @@ export const NodeView = ({
     toggleExpanded,
     offset,
     offsetTagRef,
-  } = useFormatNode(containerRef, children || []);
+  } = useFormatNode(id, containerRef);
 
   return (
     <div ref={nodeRef}>
+      {/* The starting tag of the node. */}
       <div ref={tagRef} style={{ width: "fit-content", color: "#0078d4" }}>
-        {children && (
+        {getChildren().length > 0 && (
           <ExpandButton
             ref={offsetTagRef}
             expanded={expanded}
             setExpanded={toggleExpanded}
           />
         )}
-        <OpeningTag name={name} attributes={attributes} />
+        <OpenTag id={id} />
       </div>
 
+      {/* Optional content between the starting and closing tag. */}
       <div style={{ display: expanded ? undefined : "none" }}>
-        {children?.map((node, index) => {
-          if (isValue(node)) {
-            return (
-              <div
-                ref={valueRef}
-                key={index}
-                style={{
-                  width: "fit-content",
-                  color: "#272932",
-                }}
-              >
-                {node.value}
-              </div>
-            );
-          }
+        {getValues().length > 0 && (
+          <div
+            onClick={(e) => onClickValue(e, value)}
+            ref={valueRef}
+            style={{
+              width: "fit-content",
+              color: "#272932",
+            }}
+          >
+            {getValues().join("")}
+          </div>
+        )}
 
-          return (
-            <div
-              key={index}
-              style={{
-                marginLeft: "1.5rem",
-              }}
-            >
-              <NodeView {...node} containerRef={containerRef} />
-            </div>
-          );
-        })}
+        {getChildren().map((id) => (
+          <div
+            key={id}
+            style={{
+              marginLeft: "2rem",
+            }}
+          >
+            <ItemView key={id} id={id} containerRef={containerRef} />
+          </div>
+        ))}
       </div>
       <div style={{ display: expanded ? "none" : undefined }}>...</div>
 
-      {children && (
+      {/* Determine if we should have a closing tag, only relevant if we rendered something between the starting and closing tag. */}
+      {(getChildren().length > 0 || getValues().length > 0) && (
         <div style={{ marginLeft: `${offset}px` }}>
-          <ClosingTag name={name} />
+          <CloseTag id={id} />
         </div>
       )}
     </div>
-  );
-};
-
-export const ExpandButton = forwardRef<
-  HTMLSpanElement,
-  {
-    expanded: boolean;
-    setExpanded: (expand: boolean) => void;
-  }
->(({ expanded, setExpanded }, ref) => {
-  return (
-    <span
-      ref={ref}
-      style={{ color: "#0078d4", cursor: "pointer", paddingRight: "0.5rem" }}
-      onClick={() => setExpanded(!expanded)}
-    >
-      {expanded ? "-" : "+"}
-    </span>
-  );
-});
-
-export const TagAttribute = ({
-  name,
-  value,
-}: {
-  name: string;
-  value: string;
-}) => {
-  return (
-    <span>
-      <span style={{ color: "#B24C63" }}>{` ${name}`}</span>
-      <span>=</span>
-      <span style={{ color: "#919A67" }}>"{value}"</span>
-    </span>
-  );
-};
-
-export const OpeningTag = ({
-  name,
-  attributes,
-}: {
-  name: string;
-  attributes?: Record<string, string>;
-}) => {
-  return (
-    <span style={{ color: "#0078d4" }}>
-      <span>{"<"}</span>
-      <span>{name}</span>
-      {attributes &&
-        Object.entries(attributes).map(([key, value]) => (
-          <TagAttribute key={key} name={key} value={value} />
-        ))}
-      <span>{">"}</span>
-    </span>
-  );
-};
-
-export const ClosingTag = ({ name }: { name: string }) => {
-  return (
-    <span style={{ color: "#0078d4" }}>
-      <span>{"</"}</span>
-      <span>{name}</span>
-      <span>{">"}</span>
-    </span>
   );
 };

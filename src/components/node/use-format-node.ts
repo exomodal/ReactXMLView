@@ -1,11 +1,12 @@
 import { useWindowResize } from "hooks/use-window-resize";
-import { Node, Value, isValue } from "hooks/use-xml-parser";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTreeStore } from "store";
 
 export const useFormatNode = (
-  containerRef: React.RefObject<HTMLDivElement>,
-  children: (Node | Value)[]
+  id: string,
+  containerRef: React.RefObject<HTMLDivElement>
 ) => {
+  const { getChildren } = useTreeStore((s) => s.node(id));
   const [internalOffset, setInternalOffset] = useState(0);
   const [offset, setOffset] = useState(0);
   const [expanded, setExpanded] = useState(true);
@@ -16,20 +17,22 @@ export const useFormatNode = (
 
   const { width, height } = useWindowResize();
 
-  const onlyValueChildren = useMemo(
-    // With no children we can default to false as there is nothing to render.
-    () => children.every((element) => isValue(element)) || false,
-    [children]
-  );
+  const noChildren = getChildren().length === 0;
 
   const toggleExpanded = (expand: boolean) => {
-    setExpanded(expand);
+    const node = nodeRef.current;
+
+    if (node === null) {
+      return;
+    }
 
     if (!expand) {
-      nodeRef.current?.style.setProperty("display", "flex");
+      node.style.setProperty("display", "flex");
     } else {
-      nodeRef.current?.style.setProperty("display", "inline");
+      node.style.setProperty("display", "inline");
     }
+
+    setExpanded(expand);
   };
 
   const fitsHorizontal = () => {
@@ -50,25 +53,36 @@ export const useFormatNode = (
   }, []);
 
   const formatNode = () => {
-    if (!onlyValueChildren) {
+    const node = nodeRef.current;
+    const value = valueRef.current;
+
+    if (node === null || value === null) {
+      return;
+    }
+    if (!noChildren) {
       return;
     }
 
     if (fitsHorizontal() || !expanded) {
-      nodeRef.current?.style.setProperty("display", "flex");
-      valueRef.current?.style.setProperty("margin-left", "0");
+      node.style.setProperty("display", "flex");
+      value.style.setProperty("margin-left", "0");
     } else {
-      nodeRef.current?.style.setProperty("display", "inline");
-      valueRef.current?.style.setProperty("margin-left", "2.5rem");
+      node.style.setProperty("display", "inline");
+      value.style.setProperty("margin-left", "2.5rem");
     }
   };
 
   useEffect(() => {
     formatNode();
-  }, [width, height, children, expanded]);
+  }, [width, height, getChildren(), expanded]);
 
   useEffect(() => {
-    const display = nodeRef.current?.style.getPropertyValue("display");
+    const node = nodeRef.current;
+    if (node === null) {
+      return;
+    }
+
+    const display = node.style.getPropertyValue("display");
 
     if (display === "flex") {
       setOffset(0);

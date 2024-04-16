@@ -1,10 +1,11 @@
 import { X2jOptions, XMLParser } from "fast-xml-parser";
+import { Node } from "types";
 import { useMemo } from "react";
 
 export const useXmlParser = (
   config: X2jOptions | undefined,
   xml: string = ""
-): Node[] => {
+): Node => {
   const parser = useMemo(
     () =>
       new XMLParser({
@@ -51,19 +52,5 @@ export const useXmlParser = (
     return result;
   };
 
-  return useMemo(() => parseJSON(parser.parse(xml)), [xml]);
-};
-
-export type Value = {
-  value: string;
-};
-
-export type Node = {
-  name: string;
-  attributes?: Record<string, string>;
-  children?: (Node | Value)[];
-};
-
-export const isValue = (node: Node | Value): node is Value => {
-  return "value" in node;
+  return useMemo(() => parseJSON(parser.parse(xml)[0]), [xml]);
 };
