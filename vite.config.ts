@@ -8,6 +8,7 @@ import { typescriptPaths } from "rollup-plugin-typescript-paths";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   build: {
+    sourcemap: "inline",
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       formats: ["es", "cjs"],
@@ -20,7 +21,6 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
-        sourcemap: true,
       },
       plugins: [
         typescriptPaths({
