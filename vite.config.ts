@@ -20,13 +20,14 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
+        sourcemap: true,
       },
       plugins: [
         typescriptPaths({
           preserveExtensions: true,
         }),
         typescript({
-          sourceMap: false,
+          sourceMap: true,
           declaration: true,
           outDir: "dist",
         }),
