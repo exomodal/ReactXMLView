@@ -59,9 +59,8 @@ export const useBuildTree = (rawTree: Node) => {
     return tree;
   };
 
-  const tree = buildTree(rawTree);
   const getRootId = () => {
-    const id = Object.entries(tree).find(
+    const id = Object.entries(buildTree(rawTree)).find(
       ([_, node]) => node.parentId === null
     )?.[0];
 
