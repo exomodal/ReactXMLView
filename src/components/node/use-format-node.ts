@@ -6,7 +6,7 @@ export const useFormatNode = (
   id: string,
   containerRef: React.RefObject<HTMLDivElement>
 ) => {
-  const { getChildren } = useTreeStore((s) => s.node(id));
+  const children = useTreeStore((s) => s.node(id).getChildren());
   const [internalOffset, setInternalOffset] = useState(0);
   const [offset, setOffset] = useState(0);
   const [expanded, setExpanded] = useState(true);
@@ -16,8 +16,6 @@ export const useFormatNode = (
   const valueRef = useRef<HTMLDivElement>(null);
 
   const { width, height } = useWindowResize();
-
-  const noChildren = getChildren().length === 0;
 
   const toggleExpanded = (expand: boolean) => {
     const node = nodeRef.current;
@@ -59,7 +57,7 @@ export const useFormatNode = (
     if (node === null || value === null) {
       return;
     }
-    if (!noChildren) {
+    if (!(children.length === 0)) {
       return;
     }
 
@@ -74,7 +72,7 @@ export const useFormatNode = (
 
   useEffect(() => {
     formatNode();
-  }, [width, height, getChildren(), expanded]);
+  }, [width, height, children, expanded]);
 
   useEffect(() => {
     const node = nodeRef.current;
