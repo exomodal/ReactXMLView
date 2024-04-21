@@ -1,13 +1,15 @@
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { Node } from "../types";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const useXmlParser = (
   config: X2jOptions | undefined,
   xml: string = ""
-): Node => {
-  const parser = useMemo(
-    () =>
+): Node | null => {
+  const [parser, setParser] = useState<XMLParser | null>(null);
+
+  useEffect(() => {
+    setParser(
       new XMLParser({
         preserveOrder: true,
         ignoreAttributes: false,
@@ -16,9 +18,9 @@ export const useXmlParser = (
         allowBooleanAttributes: true,
         ...config,
         textNodeName: "#text",
-      }),
-    [config]
-  );
+      })
+    );
+  }, [config]);
 
   const parseJSON = (json: any): any => {
     if (json === null || typeof json !== "object") {
@@ -52,5 +54,8 @@ export const useXmlParser = (
     return result;
   };
 
-  return useMemo(() => parseJSON(parser.parse(xml)[0]), [xml]);
+  return useMemo(
+    () => parseJSON(parser ? parser.parse(xml)[0] : null),
+    [xml, parser]
+  );
 };

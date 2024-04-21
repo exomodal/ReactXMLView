@@ -22,7 +22,7 @@ export const View = ({ xml, parseConfig, ...onClickFns }: ViewProps) => {
 
   useRegisterInteraction(onClickFns);
 
-  if (rootId === undefined) {
+  if (rootId === null) {
     return null;
   }
 

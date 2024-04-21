@@ -1,8 +1,9 @@
 import { nanoid } from "nanoid";
 import { useTreeStore } from "store";
 import { Node, StateAttribute, StateNode, StateType, isValue } from "../types";
+import { useMemo } from "react";
 
-export const useBuildTree = (rawTree: Node) => {
+export const useBuildTree = (rawTree: Node | null) => {
   const setTree = useTreeStore((s) => s.setTree);
 
   const buildNode = (
@@ -59,8 +60,8 @@ export const useBuildTree = (rawTree: Node) => {
     return tree;
   };
 
-  const getRootId = () => {
-    const id = Object.entries(buildTree(rawTree)).find(
+  const getRootId = (tree: Node) => {
+    const id = Object.entries(buildTree(tree)).find(
       ([_, node]) => node.parentId === null
     )?.[0];
 
@@ -71,5 +72,5 @@ export const useBuildTree = (rawTree: Node) => {
     return id;
   };
 
-  return getRootId();
+  return useMemo(() => (rawTree ? getRootId(rawTree) : null), [rawTree]);
 };
