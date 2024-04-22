@@ -22,20 +22,14 @@ export const useRegisterInteraction = ({
   const setInteraction = useTreeStore((s) => s.setInteraction);
 
   useEffect(() => {
-    if (onClickTag) {
-      setInteraction(onClickTag, InteractionType.ClickTag);
-    }
+    setInteraction(onClickTag, InteractionType.ClickTag);
   }, [onClickTag]);
 
   useEffect(() => {
-    if (onClickAttribute) {
-      setInteraction(onClickAttribute, InteractionType.ClickAttribute);
-    }
+    setInteraction(onClickAttribute, InteractionType.ClickAttribute);
   }, [onClickAttribute]);
 
   useEffect(() => {
-    if (onClickValue) {
-      setInteraction(onClickValue, InteractionType.ClickValue);
-    }
+    setInteraction(onClickValue, InteractionType.ClickValue);
   }, [onClickValue]);
 };

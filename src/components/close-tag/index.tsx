@@ -5,7 +5,10 @@ export const CloseTag = ({ id }: { id: string }) => {
   const { getName } = node;
 
   return (
-    <span style={{ color: "#0078d4" }} onClick={(e) => onClick(e, node)}>
+    <span
+      style={{ color: "#0078d4" }}
+      onClick={onClick && ((e) => onClick(e, node))}
+    >
       <span>{"</"}</span>
       <span>{getName()}</span>
       <span>{">"}</span>

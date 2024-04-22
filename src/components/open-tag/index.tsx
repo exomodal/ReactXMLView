@@ -7,7 +7,10 @@ export const OpenTag = ({ id }: { id: string }) => {
   const attributeIds = useTreeStore((s) => s._node(id).getAttributeIds());
 
   return (
-    <span style={{ color: "#0078d4" }} onClick={(e) => onClick(e, node)}>
+    <span
+      style={{ color: "#0078d4" }}
+      onClick={onClick && ((e) => onClick(e, node))}
+    >
       <span>{"<"}</span>
       <span>{getName()}</span>
       {attributeIds.map((id) => (

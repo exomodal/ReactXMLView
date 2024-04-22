@@ -43,7 +43,7 @@ export const ItemView = ({
       <div style={{ display: expanded ? undefined : "none" }}>
         {getValues().length > 0 && (
           <div
-            onClick={(e) => onClickValue(e, value)}
+            onClick={onClickValue && ((e) => onClickValue(e, value))}
             ref={valueRef}
             style={{
               width: "fit-content",

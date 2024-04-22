@@ -20,11 +20,14 @@ type TreeStore = {
 
   setTree: (tree: Record<string, StateNode | StateAttribute>) => void;
 
-  setInteraction: <T>(fn: InteractFn<T>, type: InteractionType) => void;
+  setInteraction: <T>(
+    fn: InteractFn<T> | undefined,
+    type: InteractionType
+  ) => void;
 
-  onClickTag: InteractFn<INode>;
-  onClickAttribute: InteractFn<IAttribute>;
-  onClickValue: InteractFn<IValue>;
+  onClickTag: InteractFn<INode> | undefined;
+  onClickAttribute: InteractFn<IAttribute> | undefined;
+  onClickValue: InteractFn<IValue> | undefined;
 
   getType: (id: string) => string;
 
@@ -68,9 +71,9 @@ export const useTreeStore = create<TreeStore>()(
       }
     },
 
-    onClickTag: (e, node) => {},
-    onClickAttribute: (e, attribute) => {},
-    onClickValue: (e, value) => {},
+    onClickTag: undefined,
+    onClickAttribute: undefined,
+    onClickValue: undefined,
 
     getType: (id) => get().tree[id].type,
 
