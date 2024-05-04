@@ -18,6 +18,7 @@ export type INode = {
 } & IBase;
 
 export type IValue = {
+  getName: () => string;
   getContent: () => string[];
 } & IBase;
 

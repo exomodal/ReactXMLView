@@ -171,6 +171,7 @@ export const useTreeStore = create<TreeStore>()(
         },
         getParent: () =>
           node.parentId !== null ? get().node(node.parentId) : null,
+        getName: () => node.name,
         getContent: () => node.values,
       };
     },
