@@ -1,10 +1,4 @@
-import {
-  ElementType,
-  StateAttribute,
-  StateNode,
-  isAttribute,
-  isNode,
-} from "types";
+import { StateAttribute, StateNode, isAttribute, isNode } from "types";
 import {
   IAttribute,
   INode,
@@ -99,6 +93,7 @@ export const useTreeStore = create<TreeStore>()(
         setClassName: (name) => {
           throw "Not implemented";
         },
+        getId: () => id,
         getPath: () => {
           const path = [node.name];
           if (node.parentId === null) return path;
@@ -130,6 +125,7 @@ export const useTreeStore = create<TreeStore>()(
         setClassName: (name) => {
           throw "Not implemented";
         },
+        getId: () => id,
         getPath: () => {
           const path = [attr.key];
           if (attr.parentId === null) return path;
@@ -159,6 +155,7 @@ export const useTreeStore = create<TreeStore>()(
         setClassName: (name) => {
           throw "Not implemented";
         },
+        getId: () => id,
         getPath: () => {
           const path = [node.name];
           if (node.parentId === null) return path;

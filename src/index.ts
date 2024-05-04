@@ -1,2 +1,3 @@
 export { View as XmlView } from "./components/view";
-export type { INode, IAttribute, IValue } from "./types";
+export { useInteractiveXml as useXmlView } from "./hooks/use-interactive-xml";
+export type { InteractFn, INode, IAttribute, IValue } from "./types";

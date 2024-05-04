@@ -1,5 +1,6 @@
 export type IBase = {
   setClassName: (name: string) => void;
+  getId: () => string;
   getPath: () => string[];
   getParent: () => INode | null;
 };

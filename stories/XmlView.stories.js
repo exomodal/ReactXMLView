@@ -51,7 +51,7 @@ export const Default = {
       centipedes, scorpions  and other insects.</description>
    </book>
 </catalog>`,
-    onClickTag: (e, node) => console.log("tag found:", node.getName()),
+    onClickTag: (e, node) => console.log("tag found:", node.getPath()),
     onClickAttribute: (e, attr) => {
       e.preventDefault();
       console.log("attribute found:", attr.getKey(), attr.getValue());
