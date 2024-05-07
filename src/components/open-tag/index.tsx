@@ -14,7 +14,7 @@ export const OpenTag = ({ id }: { id: string }) => {
       <span>{"<"}</span>
       <span>{getName()}</span>
       {attributes.map((key) => (
-        <Attribute key={key} id={id} />
+        <Attribute key={key} id={id} name={key} />
       ))}
       <span>{">"}</span>
     </span>
