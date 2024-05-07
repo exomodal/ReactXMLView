@@ -1,4 +1,4 @@
-import { StateAttribute, StateNode, isAttribute, isNode } from "types";
+import { StateNode } from "types";
 import {
   IAttribute,
   INode,
@@ -10,9 +10,9 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type TreeStore = {
-  tree: Record<string, StateNode | StateAttribute>;
+  tree: Record<string, StateNode>;
 
-  setTree: (tree: Record<string, StateNode | StateAttribute>) => void;
+  setTree: (tree: Record<string, StateNode>) => void;
 
   setInteraction: <T>(
     fn: InteractFn<T> | undefined,
@@ -27,19 +27,22 @@ type TreeStore = {
 
   _node: (id: string) => {
     getName: () => string;
-    getAttributeIds: () => string[];
+    getAttributes: () => string[];
     getValues: () => string[];
     getChildren: () => string[];
   };
 
   node: (id: string) => INode;
-  attribute: (id: string) => IAttribute;
+  attribute: (id: string, key: string) => IAttribute;
   value: (id: string) => IValue;
 };
 
 export const useTreeStore = create<TreeStore>()(
   immer((set, get) => ({
     tree: {},
+    onClickTag: undefined,
+    onClickAttribute: undefined,
+    onClickValue: undefined,
 
     setTree: (tree) => set({ tree }),
 
@@ -65,20 +68,21 @@ export const useTreeStore = create<TreeStore>()(
       }
     },
 
-    onClickTag: undefined,
-    onClickAttribute: undefined,
-    onClickValue: undefined,
+    getType: (id) => {
+      const node = get().tree[id];
+      if (node === undefined) throw "Node not found";
 
-    getType: (id) => get().tree[id].type,
+      return node.type;
+    },
 
     _node: (id) => {
       const node = get().tree[id];
 
-      if (!isNode(node)) throw "Node not found";
+      if (node === undefined) throw "Node not found";
 
       return {
         getName: () => node.name,
-        getAttributeIds: () => node.attributeIds,
+        getAttributes: () => Object.keys(node.attributes),
         getValues: () => node.values,
         getChildren: () => node.children,
       };
@@ -87,7 +91,7 @@ export const useTreeStore = create<TreeStore>()(
     node: (id) => {
       const node = get().tree[id];
 
-      if (!isNode(node)) throw "Node not found";
+      if (node === undefined) throw "Node not found";
 
       return {
         setClassName: (name) => {
@@ -110,16 +114,18 @@ export const useTreeStore = create<TreeStore>()(
         getParent: () =>
           node.parentId !== null ? get().node(node.parentId) : null,
         getName: () => node.name,
-        getAttributes: () => node.attributeIds.map(get().attribute),
+        getAttributes: () =>
+          Object.keys(node.attributes).map((key) => get().attribute(id, key)),
         getValues: () => node.values,
         getChildren: () => node.children.map(get().node),
       };
     },
 
-    attribute: (id) => {
-      const attr = get().tree[id];
+    attribute: (id, key) => {
+      // TODO: Make secure call, possibly undefined
+      const node = get().tree[id];
 
-      if (!isAttribute(attr)) throw "Attribute not found";
+      if (node === undefined) throw "Node not found";
 
       return {
         setClassName: (name) => {
@@ -127,10 +133,10 @@ export const useTreeStore = create<TreeStore>()(
         },
         getId: () => id,
         getPath: () => {
-          const path = [attr.key];
-          if (attr.parentId === null) return path;
+          const path = [key];
+          if (node.parentId === null) return path;
 
-          let parent: INode | null = get().node(attr.parentId);
+          let parent: INode | null = get().node(node.parentId);
           while (parent !== null) {
             path.push(parent.getName());
 
@@ -140,16 +146,21 @@ export const useTreeStore = create<TreeStore>()(
           return path.reverse();
         },
         getParent: () =>
-          attr.parentId !== null ? get().node(attr.parentId) : null,
-        getKey: () => attr.key,
-        getValue: () => attr.value,
+          node.parentId !== null ? get().node(node.parentId) : null,
+        getKey: () => key,
+        getValue: () => {
+          const value = node.attributes[key];
+          if (value === undefined) throw "Attribute not found";
+
+          return value;
+        },
       };
     },
 
     value: (id) => {
       const node = get().tree[id];
 
-      if (!isNode(node)) throw "Node not found";
+      if (node === undefined) throw "Node not found";
 
       return {
         setClassName: (name) => {

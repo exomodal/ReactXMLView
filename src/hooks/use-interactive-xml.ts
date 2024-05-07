@@ -11,8 +11,8 @@ export const useInteractiveXml = () => {
     return node(id);
   };
 
-  const getAttribute = (id: string) => {
-    return attribute(id);
+  const getAttribute = (id: string, key: string) => {
+    return attribute(id, key);
   };
 
   const getValue = (id: string) => {

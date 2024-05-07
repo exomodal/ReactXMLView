@@ -1,16 +1,17 @@
 import { nanoid } from "nanoid";
 import { useTreeStore } from "store";
-import { Node, StateAttribute, StateNode, StateType, isValue } from "../types";
+import { Node, StateNode, StateType, isValue } from "../types";
 import { useMemo } from "react";
 
 export const useBuildTree = (rawTree: Node | null) => {
   const setTree = useTreeStore((s) => s.setTree);
 
   const buildNode = (
-    treeRef: Record<string, StateNode | StateAttribute>,
+    treeRef: Record<string, StateNode>,
     node: Node,
     parentId?: string
   ) => {
+    // TODO: deterministic id generation
     const id = nanoid();
     const children = node.children || [];
 
@@ -25,24 +26,10 @@ export const useBuildTree = (rawTree: Node | null) => {
       }
     });
 
-    const attributes = Object.entries(node.attributes || {});
-    const attributeIds = attributes.map(([key, value]) => {
-      const attributeId = nanoid();
-
-      treeRef[attributeId] = {
-        type: StateType.Attribute,
-        key,
-        value,
-        parentId: id,
-      };
-
-      return attributeId;
-    });
-
     treeRef[id] = {
       type: StateType.Node,
       name: node.name,
-      attributeIds,
+      attributes: node.attributes || {},
       values,
       parentId: parentId || null,
       children: childNodes,

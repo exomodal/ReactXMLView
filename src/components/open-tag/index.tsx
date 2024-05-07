@@ -4,7 +4,7 @@ import { useTreeStore } from "store/tree";
 export const OpenTag = ({ id }: { id: string }) => {
   const [node, onClick] = useTreeStore((s) => [s.node(id), s.onClickTag]);
   const { getName } = node;
-  const attributeIds = useTreeStore((s) => s._node(id).getAttributeIds());
+  const attributes = useTreeStore((s) => s._node(id).getAttributes());
 
   return (
     <span
@@ -13,8 +13,8 @@ export const OpenTag = ({ id }: { id: string }) => {
     >
       <span>{"<"}</span>
       <span>{getName()}</span>
-      {attributeIds.map((id) => (
-        <Attribute key={id} id={id} />
+      {attributes.map((key) => (
+        <Attribute key={key} id={id} />
       ))}
       <span>{">"}</span>
     </span>

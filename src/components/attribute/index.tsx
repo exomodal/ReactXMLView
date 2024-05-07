@@ -1,8 +1,8 @@
 import { useTreeStore } from "store/tree";
 
-export const Attribute = ({ id }: { id: string }) => {
+export const Attribute = ({ id, key }: { id: string; key: string }) => {
   const [attribute, onClick] = useTreeStore((s) => [
-    s.attribute(id),
+    s.attribute(id, key),
     s.onClickAttribute,
   ]);
   const { getKey, getValue } = attribute;
