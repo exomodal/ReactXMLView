@@ -131,7 +131,6 @@ export const useTreeStore = create<TreeStore>()(
         setClassName: (name) => {
           throw "Not implemented";
         },
-        getId: () => id,
         getPath: () => {
           const path = [key];
           if (node.parentId === null) return path;
@@ -145,8 +144,7 @@ export const useTreeStore = create<TreeStore>()(
 
           return path.reverse();
         },
-        getParent: () =>
-          node.parentId !== null ? get().node(node.parentId) : null,
+        getNode: () => get().node(id),
         getKey: () => key,
         getValue: () => {
           const value = node.attributes[key];
@@ -166,7 +164,6 @@ export const useTreeStore = create<TreeStore>()(
         setClassName: (name) => {
           throw "Not implemented";
         },
-        getId: () => id,
         getPath: () => {
           const path = [node.name];
           if (node.parentId === null) return path;
@@ -180,8 +177,7 @@ export const useTreeStore = create<TreeStore>()(
 
           return path.reverse();
         },
-        getParent: () =>
-          node.parentId !== null ? get().node(node.parentId) : null,
+        getNode: () => get().node(id),
         getName: () => node.name,
         getContent: () => node.values,
       };

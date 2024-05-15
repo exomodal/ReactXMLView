@@ -1,16 +1,17 @@
 export type IBase = {
   setClassName: (name: string) => void;
-  getId: () => string;
   getPath: () => string[];
-  getParent: () => INode | null;
 };
 
 export type IAttribute = {
+  getNode: () => INode;
   getKey: () => string;
   getValue: () => string;
 } & IBase;
 
 export type INode = {
+  getId: () => string;
+  getParent: () => INode | null;
   getName: () => string;
   getAttributes: () => IAttribute[];
   getValues: () => string[];
@@ -18,6 +19,7 @@ export type INode = {
 } & IBase;
 
 export type IValue = {
+  getNode: () => INode;
   getName: () => string;
   getContent: () => string[];
 } & IBase;
