@@ -1,6 +1,6 @@
 {
   "name": "react-interactive-xml-viewer",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "React component to view XML data",
   "author": "Sebastiaan Gerritsen <dev@sebastiaan.io>",
   "license": "MIT",
@@ -12,15 +12,14 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "packageManager": "yarn@4.1.1",
   "engines": {
     "node": ">=20.9.0"
   },
   "dependencies": {
-    "fast-xml-parser": "4.3.6",
-    "immer": "^10.0.4",
-    "nanoid": "^5.0.7",
-    "zustand": "4.5.2"
+    "fast-xml-parser": "5.5.9",
+    "immer": "^11.1.4",
+    "nanoid": "^5.1.7",
+    "zustand": "5.0.12"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.2.25",

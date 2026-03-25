@@ -18,3 +18,9 @@ node_modules
 *storybook.log
 
 dist
+
+.devenv
+.direnv
+flake.nix
+flake.lock
+.envrc
